@@ -1,15 +1,14 @@
 import { useState } from "react";
 import s from './form.module.css';
-import { useDispatch, useSelector } from "react-redux";
-import { addContact } from "Redux/Slice";
-import { nanoid } from 'nanoid';
+import { useAddContactMutation, useFetchContactsQuery } from "Redux/SliceApi";
 import Notiflix from 'notiflix';
 
 export default function Form() {
     const [name, setName] = useState('');
     const [number, setNumber] = useState('+380');
-    const dispatch = useDispatch();
-    const contactList = useSelector((state) => state.contacts.items);
+    const { data } = useFetchContactsQuery();
+    const contactList = data;
+    const [addContact, { isLoading: isAdd }] = useAddContactMutation();
 
     const handleChange = e => {
         const { name, value } = e.currentTarget;
@@ -27,7 +26,7 @@ export default function Form() {
         }
     }
 
-    const handleSubmit = e => {
+    const handleSubmit = async e => {
         e.preventDefault();
 
         if (
@@ -37,7 +36,7 @@ export default function Form() {
             return Notiflix.Notify.failure(`${name} is already in contacts`);
         }
 
-        dispatch(addContact({ name, number, id: nanoid() }))
+        await addContact({ name, number });
         resetState();
     };
 
@@ -74,7 +73,7 @@ export default function Form() {
                 />
             </label>
 
-            <button type="submit" className={s.btn_form}>add contacts</button>
+            <button type="submit" className={s.btn_form}>{isAdd ? 'ADD...' : "add contacts"}</button>
         </form>
     )
 };

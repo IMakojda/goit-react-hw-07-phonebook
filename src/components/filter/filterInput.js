@@ -1,11 +1,11 @@
 import React from "react";
 import s from './filter.module.css'
 import { useDispatch, useSelector } from "react-redux";
-import { onChangeFilter } from "Redux/Slice";
+import { onChangeFilter } from "Redux/SliceFilter";
 
 const FilterContacts = () => {
   const dispatch = useDispatch();
-  const inputValue = useSelector(state => state.contacts.filter);
+  const inputValue = useSelector(state => state.filter.filter);
 
   return (
     <label className={s.find__contacts}>Find contacts by name
