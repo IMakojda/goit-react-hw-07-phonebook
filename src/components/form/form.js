@@ -36,7 +36,7 @@ export default function Form() {
             return Notiflix.Notify.failure(`${name} is already in contacts`);
         }
 
-        await addContact({ name, number });
+        await addContact({ name, phone:number });
         resetState();
     };
 
